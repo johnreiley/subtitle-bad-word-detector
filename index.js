@@ -15,7 +15,7 @@ try {
   return;
 }
 
-let badWordLines = {};
+let badWordLines = [];
 let subtitles = data
   .split('\r\n\r\n')
   .filter(section => section !== "")
@@ -39,20 +39,20 @@ let subtitles = data
 subtitles.forEach(sub => {
   sub.words.forEach(word => {
     if (badWordDictionary[word]) {
-      badWordLines[sub.number] = {
+      badWordLines.push({
         time: sub.time,
         word: wordsToCensor[word] ? censorWord(word) : word
-      };
+      });
     }
   })
 })
 
-console.log(badWordLines);
 
 let outputContents = []
-for (let key in badWordLines) {
-  outputContents.push(`[] ${key} ${badWordLines[key].time} ${badWordLines[key].word}`)
+for (let i = 0; i < badWordLines.length; i++) {
+  outputContents.push(`[] ${i} ${badWordLines[i].time} ${badWordLines[i].word}`)
 }
+console.log(outputContents.join('\n'));
 let outputFile = `${path.basename(filepath).split('.')[0]}-BadWords.txt`;
 let outputDir = path.dirname(filepath);
 console.log(path.join(outputDir, outputFile))
