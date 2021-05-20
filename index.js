@@ -28,7 +28,7 @@ let subtitles = data
         .slice(2, lines.length)
         .join(' ')
         .split(' ')
-        .map(word => word.replace(/\W/, '').toLowerCase());
+        .map(word => word.replace(/(<([^>]+)>)/ig, '').replace(/[\W]/g, '').toLowerCase());
     return {
       number,
       time,
